@@ -1,89 +1,299 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Welcome to Firebase Hosting</title>
+<html lang="he" dir="rtl">
 
-    <!-- update the version number as needed -->
-    <script defer src="/__/firebase/11.8.1/firebase-app-compat.js"></script>
-    <!-- include only the Firebase features as you need -->
-    <script defer src="/__/firebase/11.8.1/firebase-auth-compat.js"></script>
-    <script defer src="/__/firebase/11.8.1/firebase-database-compat.js"></script>
-    <script defer src="/__/firebase/11.8.1/firebase-firestore-compat.js"></script>
-    <script defer src="/__/firebase/11.8.1/firebase-functions-compat.js"></script>
-    <script defer src="/__/firebase/11.8.1/firebase-messaging-compat.js"></script>
-    <script defer src="/__/firebase/11.8.1/firebase-storage-compat.js"></script>
-    <script defer src="/__/firebase/11.8.1/firebase-analytics-compat.js"></script>
-    <script defer src="/__/firebase/11.8.1/firebase-remote-config-compat.js"></script>
-    <script defer src="/__/firebase/11.8.1/firebase-performance-compat.js"></script>
-    <!-- 
-      initialize the SDK after all desired features are loaded, set useEmulator to false
-      to avoid connecting the SDK to running emulators.
-    -->
-    <script defer src="/__/firebase/init.js?useEmulator=true"></script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מחשבון השוואת השקעות</title>
+    <!-- MathJax לצורך הצגת נוסחאות ב־LaTeX -->
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        /* סגנונות כלליים */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
 
-    <style media="screen">
-      body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
-      #message { background: white; max-width: 360px; margin: 100px auto 16px; padding: 32px 24px; border-radius: 3px; }
-      #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
-      #message h1 { font-size: 22px; font-weight: 300; color: rgba(0,0,0,0.6); margin: 0 0 16px;}
-      #message p { line-height: 140%; margin: 16px 0 24px; font-size: 14px; }
-      #message a { display: block; text-align: center; background: #039be5; text-transform: uppercase; text-decoration: none; color: white; padding: 16px; border-radius: 4px; }
-      #message, #message a { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
-      #load { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
-      @media (max-width: 600px) {
-        body, #message { margin-top: 0; background: white; box-shadow: none; }
-        body { border-top: 16px solid #ffa100; }
-      }
+        /* קונטיינר לטופס */
+        .calculator-container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 16px;
+            margin: 16px;
+            max-width: 400px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* כותרת */
+        .calculator-container h1 {
+            font-size: 1.5em;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        /* קבוצה של קלט */
+        .input-group {
+            margin-bottom: 12px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 4px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 1em;
+        }
+
+        /* סגנון כפתור חישוב */
+        .calculate-button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007BFF;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            font-size: 1em;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+
+        .calculate-button:hover {
+            background-color: #0056b3;
+        }
+
+        /* סגנון לסעיף התוצאות */
+        .results {
+            margin-top: 20px;
+            padding: 12px;
+            background-color: #e9ecef;
+            border-radius: 4px;
+        }
+
+        .results p {
+            margin: 8px 0;
+            font-size: 0.9em;
+        }
+
+        /* סגנון לסעיף הנוסחאות */
+        .formulas {
+            margin-top: 12px;
+            padding: 12px;
+            background-color: #ffffff;
+            border-radius: 4px;
+            border: 1px solid #dddddd;
+        }
+
+        .formula-item {
+            margin-bottom: 10px;
+        }
+
+        .formula-label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 4px;
+            font-size: 0.9em;
+        }
+
+        .formula-math {
+            overflow-x: auto;
+            /* מאפשר גלילה אופקית אם הנוסחה רחבה */
+        }
+
+        /* רוחב לטלפונים קטנים */
+        @media (max-width: 480px) {
+            .calculator-container {
+                padding: 12px;
+                margin: 8px;
+            }
+
+            .calculate-button {
+                font-size: 0.9em;
+                padding: 8px;
+            }
+
+            .input-group input {
+                font-size: 0.9em;
+                padding: 6px;
+            }
+
+            .formula-label {
+                font-size: 0.8em;
+            }
+        }
     </style>
-  </head>
-  <body>
-    <div id="message">
-      <h2>Welcome</h2>
-      <h1>Firebase Hosting Setup Complete</h1>
-      <p>You're seeing this because you've successfully setup Firebase Hosting. Now it's time to go build something extraordinary!</p>
-      <a target="_blank" href="https://firebase.google.com/docs/hosting/">Open Hosting Documentation</a>
+</head>
+
+<body>
+    <div class="calculator-container">
+        <h1>השוואת השקעות</h1>
+        <!-- שדות קלט לערכי המשתמש -->
+        <div class="input-group">
+            <label for="initialIls">סכום התחלתי (₪)</label>
+            <input type="number" id="initialIls" placeholder="למשל 100000" />
+        </div>
+        <div class="input-group">
+            <label for="rateTransfer">שער המרה (₪→$)</label>
+            <input type="number" step="0.0001" id="rateTransfer" placeholder="למשל 3.5" />
+        </div>
+        <div class="input-group">
+            <label for="rateReturn">שער המרה ($→₪)</label>
+            <input type="number" step="0.0001" id="rateReturn" placeholder="למשל 3.8" />
+        </div>
+        <div class="input-group">
+            <label for="profitForeign">רווח בחו&quot;ל (%)</label>
+            <input type="number" step="0.01" id="profitForeign" placeholder="למשל 10" />
+        </div>
+        <div class="input-group">
+            <label for="profitLocal">רווח בארץ (%)</label>
+            <input type="number" step="0.01" id="profitLocal" placeholder="למשל 5" />
+        </div>
+        <!-- כפתור להפעלת החישוב -->
+        <button class="calculate-button" onclick="calculateResults()">
+            חשב
+        </button>
+        <!-- סעיף להצגת התוצאות המספריות -->
+        <div class="results" id="resultsSection" style="display: none;">
+            <p id="rateDiffText"></p>
+            <p id="foreignResultText"></p>
+            <p id="localResultText"></p>
+            <p id="scenarioComparisonText"></p>
+            <p id="profitDiffText"></p>
+        </div>
+        <!-- סעיף להצגת הנוסחאות ב־LaTeX, עם הפרדה בין טקסט לנוסחה -->
+        <div class="formulas" id="formulasSection" style="display: none;">
+            <div class="formula-item">
+                <span class="formula-label" id="labelRateDiff"></span>
+                <span class="formula-math" id="mathRateDiff"></span>
+            </div>
+            <div class="formula-item">
+                <span class="formula-label" id="labelForeign1"></span>
+                <span class="formula-math" id="mathForeign1"></span>
+            </div>
+            <div class="formula-item">
+                <span class="formula-label" id="labelForeign2a"></span>
+                <span class="formula-math" id="mathForeign2a"></span>
+            </div>
+            <div class="formula-item">
+                <span class="formula-label" id="labelForeign2b"></span>
+                <span class="formula-math" id="mathForeign2b"></span>
+            </div>
+            <div class="formula-item">
+                <span class="formula-label" id="labelLocal1"></span>
+                <span class="formula-math" id="mathLocal1"></span>
+            </div>
+            <div class="formula-item">
+                <span class="formula-label" id="labelLocal2"></span>
+                <span class="formula-math" id="mathLocal2"></span>
+            </div>
+
+            <div class="formula-item">
+                <span class="formula-label" id="labelPctDiff"></span>
+                <span class="formula-math" id="mathPctDiff"></span>
+            </div>
+        </div>
     </div>
-    <p id="load">Firebase SDK Loading&hellip;</p>
 
     <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const loadEl = document.querySelector('#load');
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-        // // The Firebase SDK is initialized and available here!
-        //
-        // firebase.auth().onAuthStateChanged(user => { });
-        // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
-        // firebase.firestore().doc('/foo/bar').get().then(() => { });
-        // firebase.functions().httpsCallable('yourFunction')().then(() => { });
-        // firebase.messaging().requestPermission().then(() => { });
-        // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
-        // firebase.analytics(); // call to activate
-        // firebase.analytics().logEvent('tutorial_completed');
-        // firebase.performance(); // call to activate
-        //
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+        // פונקציה לביצוע החישובים ועדכון התוצאות והנוסחאות
+        function calculateResults() {
+            // קריאת ערכי המשתמש
+            const initialIls = parseFloat(document.getElementById('initialIls').value);
+            const rateTransfer = parseFloat(document.getElementById('rateTransfer').value);
+            const rateReturn = parseFloat(document.getElementById('rateReturn').value);
+            const profitForeignPercent = parseFloat(document.getElementById('profitForeign').value) / 100;
+            const profitLocalPercent = parseFloat(document.getElementById('profitLocal').value) / 100;
 
-        try {
-          let app = firebase.app();
-          let features = [
-            'auth', 
-            'database', 
-            'firestore',
-            'functions',
-            'messaging', 
-            'storage', 
-            'analytics', 
-            'remoteConfig',
-            'performance',
-          ].filter(feature => typeof app[feature] === 'function');
-          loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
-        } catch (e) {
-          console.error(e);
-          loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
+            // חישוב הפרש באחוזים בין שערי הקנייה והמכירה
+            const rateDiffPct = ((rateReturn - rateTransfer) / rateTransfer) * 100;
+
+            // חישוב תרחיש חו"ל
+            const foreignAmount = initialIls / rateTransfer;                                 // המרת ₪ לדולר
+            const foreignAfterProfit = foreignAmount * (1 + profitForeignPercent);            // לאחר הרווח בחו"ל
+            const finalIlsForeign = foreignAfterProfit * rateReturn;                          // המרה חזרה ל₪
+            const gainIlsForeign = finalIlsForeign - initialIls;                              // רווח נטו (₪)
+
+            // חישוב תרחיש מקומי
+            const finalIlsLocal = initialIls * (1 + profitLocalPercent);                      // סכום לאחר רווח בארץ
+            const gainIlsLocal = finalIlsLocal - initialIls;                                  // רווח נטו (₪)
+
+            // חישוב הפרש באחוזים בין שני הרווחים
+            const pctDiff = ((gainIlsForeign - gainIlsLocal) / gainIlsLocal) * 100;
+
+            // עדכון התוצאות המספריות
+            document.getElementById('rateDiffText').textContent =
+                `הפרש שערים (מכירה מול קנייה): ${rateDiffPct.toFixed(2)}%`;
+            document.getElementById('foreignResultText').textContent =
+                `רווח אם משקיעים בחו"ל: ${gainIlsForeign.toFixed(2)} ₪`;
+            document.getElementById('localResultText').textContent =
+                `רווח אם משקיעים בארץ: ${gainIlsLocal.toFixed(2)} ₪`;
+            if (gainIlsForeign > gainIlsLocal) {
+                document.getElementById('scenarioComparisonText').textContent =
+                    `רווחי יותר להשקיע בחו"ל.`;
+            } else if (gainIlsForeign < gainIlsLocal) {
+                document.getElementById('scenarioComparisonText').textContent =
+                    `רווחי יותר להשקיע בארץ.`;
+            } else {
+                document.getElementById('scenarioComparisonText').textContent =
+                    `הרווחים שווים בשני התרחישים.`;
+            }
+            document.getElementById('profitDiffText').textContent =
+                `הפרש באחוזים בין הרווחים: ${Math.abs(pctDiff).toFixed(2)}%`;
+
+            // עדכון תוויות הנוסחאות (טקסט נפרד)
+            document.getElementById('labelRateDiff').textContent = 'הפרש שערים:';
+            document.getElementById('labelForeign1').textContent = 'תרחיש חו"ל (שלב 1):';
+            document.getElementById('labelForeign2a').textContent = 'תרחיש חו"ל (שלב 2a):';
+            document.getElementById('labelForeign2b').textContent = 'תרחיש חו"ל (שלב 2b):';
+            // תוויות נוספות ל־“תרחיש מקומי”
+            document.getElementById('labelLocal1').textContent = 'תרחיש מקומי (שלב 1):';
+            document.getElementById('labelLocal2').textContent = 'תרחיש מקומי (שלב 2):';
+
+            document.getElementById('labelPctDiff').textContent = 'הפרש אחוזים:';
+
+            // עדכון הנוסחאות ב־LaTeX (ללא טקסט בתוך ה־MathJax)
+            document.getElementById('mathRateDiff').innerHTML =
+                `\\(\\frac{${rateReturn.toFixed(4)} - ${rateTransfer.toFixed(4)}}{${rateTransfer.toFixed(4)}} \\times 100 = ${rateDiffPct.toFixed(2)}\\%\\)`;
+
+            document.getElementById('mathForeign1').innerHTML =
+                `\\(\\frac{${initialIls}}{${rateTransfer}} = ${foreignAmount.toFixed(2)}\\)`;
+
+            document.getElementById('mathForeign2a').innerHTML =
+                `\\(${foreignAmount.toFixed(2)} \\times (1 + ${profitForeignPercent.toFixed(2)}) = ${foreignAfterProfit.toFixed(2)}\\)`;
+            document.getElementById('mathForeign2b').innerHTML =
+                `\\(${foreignAfterProfit.toFixed(2)} \\times ${rateReturn.toFixed(4)} = ${finalIlsForeign.toFixed(2)}\\)`;
+
+            // נוסחאות ב־LaTeX מחולקות לשני שלבים
+            document.getElementById('mathLocal1').innerHTML =
+                `\\(${initialIls} \\times (1 + ${profitLocalPercent.toFixed(2)}) = ${finalIlsLocal.toFixed(2)}\\)`;
+
+            document.getElementById('mathLocal2').innerHTML =
+                `\\(${finalIlsLocal.toFixed(2)} - ${initialIls} = ${gainIlsLocal.toFixed(2)}\\)`;
+
+            document.getElementById('mathPctDiff').innerHTML =
+                `\\(\\frac{${gainIlsForeign.toFixed(2)} - ${gainIlsLocal.toFixed(2)}}{${gainIlsLocal.toFixed(2)}} \\times 100 = ${pctDiff.toFixed(2)}\\%\\)`;
+
+            // הצגת הסעיפים והפעלת MathJax לרינדור הנוסחאות
+            document.getElementById('resultsSection').style.display = 'block';
+            document.getElementById('formulasSection').style.display = 'block';
+            MathJax.typeset();
         }
-      });
     </script>
-  </body>
+</body>
+
 </html>
