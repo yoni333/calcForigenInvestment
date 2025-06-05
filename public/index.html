@@ -2,452 +2,463 @@
 <html lang="he" dir="rtl">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>מחשבון השוואת השקעות</title>
-    <!-- מטא־תגיות לשיפור SEO -->
-    <meta name="description" content="מחשבון השוואת השקעות: מחשב האם משתלם להעביר השקעות מישראל לחו״ל בהתחשב בשערי המרה ורווחים" />
-    <meta name="keywords" content="השקעות, חו״ל, המרת מט"ח, מחשבון רווח, ישראל" />
-    <!-- MathJax לצורך הצגת נוסחאות ב־LaTeX -->
-    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <style>
-        /* סגנונות כלליים */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>מחשבון השוואת השקעות</title>
+  <!-- מטא־תגיות לשיפור SEO -->
+  <meta name="description"
+    content="מחשבון השוואת השקעות: מחשב האם משתלם להעביר השקעות מישראל לחו״ל בהתחשב בשערי המרה ורווחים" />
+  <meta name="keywords" content="השקעות, חו״ל, המרת מט" ח, מחשבון רווח, ישראל" />
+  <!-- MathJax לצורך הצגת נוסחאות ב־LaTeX -->
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <style>
+    /* סגנונות כלליים */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
 
-        /* קונטיינר לטופס */
-        .calculator-container {
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            padding: 16px;
-            margin: 16px;
-            max-width: 400px;
-            width: 100%;
-            box-sizing: border-box;
-        }
+    /* קונטיינר לטופס */
+    .calculator-container {
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      padding: 16px;
+      margin: 16px;
+      max-width: 400px;
+      width: 100%;
+      box-sizing: border-box;
+    }
 
-        /* כותרת */
-        .calculator-container h1 {
-            font-size: 1.5em;
-            margin-bottom: 16px;
-            text-align: center;
-        }
+    /* כותרת */
+    .calculator-container h1 {
+      font-size: 1.5em;
+      margin-bottom: 16px;
+      text-align: center;
+    }
 
-        /* קבוצה של קלט */
-        .input-group {
-            margin-bottom: 12px;
-        }
+    /* קבוצה של קלט */
+    .input-group {
+      margin-bottom: 12px;
+    }
 
-        .input-group label {
-            display: block;
-            margin-bottom: 4px;
-            font-weight: bold;
-            font-size: 0.9em;
-        }
+    .input-group label {
+      display: block;
+      margin-bottom: 4px;
+      font-weight: bold;
+      font-size: 0.9em;
+    }
 
-        .input-group input {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #cccccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-            font-size: 1em;
-        }
+    .input-group input {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #cccccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      font-size: 1em;
+    }
 
-        /* סגנון להתמקדות רכיבים */
-        .input-group input:focus,
-        .calculate-button:focus {
-            outline: 2px solid #0056b3; /* סגנון ברור ל־focus */
-            outline-offset: 2px;
-        }
+    /* סגנון להתמקדות רכיבים */
+    .input-group input:focus,
+    .calculate-button:focus {
+      outline: 2px solid #0056b3;
+      /* סגנון ברור ל־focus */
+      outline-offset: 2px;
+    }
 
-        /* סגנון כפתור חישוב */
-        .calculate-button {
-            width: 100%;
-            padding: 10px;
-            background-color: #007BFF;
-            color: #ffffff;
-            border: none;
-            border-radius: 4px;
-            font-size: 1em;
-            cursor: pointer;
-            margin-top: 8px;
-        }
+    /* סגנון כפתור חישוב */
+    .calculate-button {
+      width: 100%;
+      padding: 10px;
+      background-color: #007BFF;
+      color: #ffffff;
+      border: none;
+      border-radius: 4px;
+      font-size: 1em;
+      cursor: pointer;
+      margin-top: 8px;
+    }
 
-        .calculate-button:hover {
-            background-color: #0056b3;
-        }
+    .calculate-button:hover {
+      background-color: #0056b3;
+    }
 
-        /* סגנון להודעות שגיאה */
-        .error-message {
-            color: #B00020; /* צבע אדום ברור */
-            font-size: 0.8em;
-            margin-top: 4px;
-        }
+    /* סגנון להודעות שגיאה */
+    .error-message {
+      color: #B00020;
+      /* צבע אדום ברור */
+      font-size: 0.8em;
+      margin-top: 4px;
+    }
 
-        /* סגנון לסעיף התוצאות */
-        .results {
-            margin-top: 20px;
-            padding: 12px;
-            background-color: #e9ecef;
-            border-radius: 4px;
-        }
+    /* סגנון לסעיף התוצאות */
+    .results {
+      margin-top: 20px;
+      padding: 12px;
+      background-color: #e9ecef;
+      border-radius: 4px;
+    }
 
-        .results p {
-            margin: 8px 0;
-            font-size: 0.9em;
-        }
+    .results p {
+      margin: 8px 0;
+      font-size: 0.9em;
+    }
 
-        /* סגנון לסעיף הנוסחאות */
-        .formulas {
-            margin-top: 12px;
-            padding: 12px;
-            background-color: #ffffff;
-            border-radius: 4px;
-            border: 1px solid #dddddd;
-        }
+    /* סגנון לסעיף הנוסחאות */
+    .formulas {
+      margin-top: 12px;
+      padding: 12px;
+      background-color: #ffffff;
+      border-radius: 4px;
+      border: 1px solid #dddddd;
+    }
 
-        .formula-item {
-            margin-bottom: 10px;
-        }
+    .formula-item {
+      margin-bottom: 10px;
+    }
 
-        .formula-label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 4px;
-            font-size: 0.9em;
-        }
+    .formula-label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 4px;
+      font-size: 0.9em;
+    }
 
-        .formula-math {
-            overflow-x: auto; /* מאפשר גלילה אופקית אם הנוסחה רחבה */
-        }
+    .formula-math {
+      overflow-x: auto;
+      /* מאפשר גלילה אופקית אם הנוסחה רחבה */
+    }
 
-        /* רוחב לטלפונים קטנים */
-        @media (max-width: 480px) {
-            .calculator-container {
-                padding: 12px;
-                margin: 8px;
-            }
+    /* רוחב לטלפונים קטנים */
+    @media (max-width: 480px) {
+      .calculator-container {
+        padding: 12px;
+        margin: 8px;
+      }
 
-            .calculate-button {
-                font-size: 0.9em;
-                padding: 8px;
-            }
+      .calculate-button {
+        font-size: 0.9em;
+        padding: 8px;
+      }
 
-            .input-group input {
-                font-size: 0.9em;
-                padding: 6px;
-            }
+      .input-group input {
+        font-size: 0.9em;
+        padding: 6px;
+      }
 
-            .formula-label {
-                font-size: 0.8em;
-            }
-        }
+      .formula-label {
+        font-size: 0.8em;
+      }
+    }
 
-        /* סגנון לטקסט סמנטי מוסתר לשיפור נגישות */
-        .visually-hidden {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border: 0;
-        }
-    </style>
+    /* סגנון לטקסט סמנטי מוסתר לשיפור נגישות */
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+  </style>
 </head>
 
 <body>
-    <main>
-        <!-- תיאור התוכנית לנגישות ול־SEO -->
-        <section aria-labelledby="calculatorDescription">
-            <h2 id="calculatorDescription" class="visually-hidden">תיאור המחשבון</h2>
-            <p>
-                המחשבון הנוכחי מאפשר להשוות בין השקעה בארץ להשקעה בחו״ל. יש להזין את סכום ההשקעה ההתחלתי בשקלים, שער המרה להמרת השקלים לדולרים (בזמן העברה), שער המרה להמרת הדולרים חזרה לשקלים (בזמן החזרה), אחוז הרווח הצפוי בחו״ל ואחוז הרווח הצפוי בארץ. המחשבון יציג את הרווח הנקי בכל תרחיש ואת ההפרש בין הרווחים.
-            </p>
-        </section>
+  <main>
 
-        <section class="calculator-container" role="form" aria-labelledby="calculatorTitle">
-            <h1 id="calculatorTitle">השוואת השקעות</h1>
-            <form id="investmentForm" novalidate>
-                <!-- סכום התחלתי -->
-                <div class="input-group">
-                    <label for="initialIls">סכום התחלתי (₪)</label>
-                    <input type="text" id="initialIls" name="initialIls" placeholder="למשל 100000"
-                        required aria-required="true" aria-describedby="initialIlsError" inputmode="numeric" />
-                    <div id="initialIlsError" class="error-message" role="alert" aria-live="assertive"></div>
-                </div>
-                <!-- שער המרה להעברה -->
-                <div class="input-group">
-                    <label for="rateTransfer">שער המרה (₪→$)</label>
-                    <input type="text" id="rateTransfer" name="rateTransfer" placeholder="למשל 3.5"
-                        required aria-required="true" aria-describedby="rateTransferError" inputmode="decimal" />
-                    <div id="rateTransferError" class="error-message" role="alert" aria-live="assertive"></div>
-                </div>
-                <!-- שער המרה להחזרה -->
-                <div class="input-group">
-                    <label for="rateReturn">שער המרה ($→₪)</label>
-                    <input type="text" id="rateReturn" name="rateReturn" placeholder="למשל 3.8"
-                        required aria-required="true" aria-describedby="rateReturnError" inputmode="decimal" />
-                    <div id="rateReturnError" class="error-message" role="alert" aria-live="assertive"></div>
-                </div>
-                <!-- רווח בחו"ל -->
-                <div class="input-group">
-                    <label for="profitForeign">רווח בחו״ל (%)</label>
-                    <input type="text" id="profitForeign" name="profitForeign" placeholder="למשל 10"
-                        required aria-required="true" aria-describedby="profitForeignError" inputmode="decimal" />
-                    <div id="profitForeignError" class="error-message" role="alert" aria-live="assertive"></div>
-                </div>
-                <!-- רווח בארץ -->
-                <div class="input-group">
-                    <label for="profitLocal">רווח בארץ (%)</label>
-                    <input type="text" id="profitLocal" name="profitLocal" placeholder="למשל 5"
-                        required aria-required="true" aria-describedby="profitLocalError" inputmode="decimal" />
-                    <div id="profitLocalError" class="error-message" role="alert" aria-live="assertive"></div>
-                </div>
-                <!-- כפתור להפעלת החישוב -->
-                <button type="button" class="calculate-button" onclick="calculateResults()">
-                    חשב
-                </button>
-            </form>
-            <!-- סעיף להצגת התוצאות המספריות עם aria-live -->
-            <div class="results" id="resultsSection" style="display: none;" aria-live="polite">
-                <p id="rateDiffText"></p>
-                <p id="foreignResultText"></p>
-                <p id="localResultText"></p>
-                <p id="scenarioComparisonText"></p>
-                <p id="profitDiffText"></p>
-            </div>
-            <!-- סעיף להצגת הנוסחאות ב־LaTeX -->
-            <div class="formulas" id="formulasSection" style="display: none;">
-                <div class="formula-item">
-                    <span class="formula-label" id="labelRateDiff"></span>
-                    <span class="formula-math" id="mathRateDiff"></span>
-                </div>
-                <div class="formula-item">
-                    <span class="formula-label" id="labelForeign1"></span>
-                    <span class="formula-math" id="mathForeign1"></span>
-                </div>
-                <div class="formula-item">
-                    <span class="formula-label" id="labelForeign2a"></span>
-                    <span class="formula-math" id="mathForeign2a"></span>
-                </div>
-                <div class="formula-item">
-                    <span class="formula-label" id="labelForeign2b"></span>
-                    <span class="formula-math" id="mathForeign2b"></span>
-                </div>
-                <div class="formula-item">
-                    <span class="formula-label" id="labelLocal1"></span>
-                    <span class="formula-math" id="mathLocal1"></span>
-                </div>
-                <div class="formula-item">
-                    <span class="formula-label" id="labelLocal2"></span>
-                    <span class="formula-math" id="mathLocal2"></span>
-                </div>
-                <div class="formula-item">
-                    <span class="formula-label" id="labelPctDiff"></span>
-                    <span class="formula-math" id="mathPctDiff"></span>
-                </div>
-            </div>
-        </section>
-    </main>
 
-    <script>
-        // פונקציה להסרת הודעות שגיאה כאשר המשתמש כותב מחדש
-        function clearError(inputId, errorId) {
-            const input = document.getElementById(inputId);
-            const errorDiv = document.getElementById(errorId);
-            input.removeAttribute('aria-invalid');
-            errorDiv.textContent = '';
+    <section class="calculator-container" role="form" aria-labelledby="calculatorTitle">
+      <h1 id="calculatorTitle">השוואת השקעות</h1>
+      <!-- תיאור התוכנית לנגישות ול־SEO -->
+      <section aria-labelledby="calculatorDescription">
+        <h2 id="calculatorDescription" class="visually-hidden">תיאור המחשבון</h2>
+        <h4>
+          המחשבון הנוכחי מאפשר להשוות בין השקעה בארץ להשקעה בחו״ל.
+        </h4>
+        <h5>
+           
+          יש להזין את סכום ההשקעה ההתחלתי בשקלים, שער המרה
+          להמרת השקלים לדולרים (בזמן העברה), שער המרה להמרת הדולרים חזרה לשקלים (בזמן החזרה), אחוז הרווח הצפוי בחו״ל
+          ואחוז הרווח הצפוי בארץ. המחשבון יציג את הרווח הנקי בכל תרחיש ואת ההפרש בין הרווחים.
+        </h5>
+      </section>
+      <form id="investmentForm" novalidate>
+        <!-- סכום התחלתי -->
+        <div class="input-group">
+          <label for="initialIls">סכום התחלתי (₪)</label>
+          <input type="text" id="initialIls" name="initialIls" placeholder="למשל 100000" required aria-required="true"
+            aria-describedby="initialIlsError" inputmode="numeric" />
+          <div id="initialIlsError" class="error-message" role="alert" aria-live="assertive"></div>
+        </div>
+        <!-- שער המרה להעברה -->
+        <div class="input-group">
+          <label for="rateTransfer">שער המרה (₪→$)</label>
+          <input type="text" id="rateTransfer" name="rateTransfer" placeholder="למשל 3.5" required aria-required="true"
+            aria-describedby="rateTransferError" inputmode="decimal" />
+          <div id="rateTransferError" class="error-message" role="alert" aria-live="assertive"></div>
+        </div>
+        <!-- שער המרה להחזרה -->
+        <div class="input-group">
+          <label for="rateReturn">שער המרה ($→₪)</label>
+          <input type="text" id="rateReturn" name="rateReturn" placeholder="למשל 3.8" required aria-required="true"
+            aria-describedby="rateReturnError" inputmode="decimal" />
+          <div id="rateReturnError" class="error-message" role="alert" aria-live="assertive"></div>
+        </div>
+        <!-- רווח בחו"ל -->
+        <div class="input-group">
+          <label for="profitForeign">רווח בחו״ל (%)</label>
+          <input type="text" id="profitForeign" name="profitForeign" placeholder="למשל 10" required aria-required="true"
+            aria-describedby="profitForeignError" inputmode="decimal" />
+          <div id="profitForeignError" class="error-message" role="alert" aria-live="assertive"></div>
+        </div>
+        <!-- רווח בארץ -->
+        <div class="input-group">
+          <label for="profitLocal">רווח בארץ (%)</label>
+          <input type="text" id="profitLocal" name="profitLocal" placeholder="למשל 5" required aria-required="true"
+            aria-describedby="profitLocalError" inputmode="decimal" />
+          <div id="profitLocalError" class="error-message" role="alert" aria-live="assertive"></div>
+        </div>
+        <!-- כפתור להפעלת החישוב -->
+        <button type="button" class="calculate-button" onclick="calculateResults()">
+          חשב
+        </button>
+      </form>
+      <!-- סעיף להצגת התוצאות המספריות עם aria-live -->
+      <div class="results" id="resultsSection" style="display: none;" aria-live="polite">
+        <p id="rateDiffText"></p>
+        <p id="foreignResultText"></p>
+        <p id="localResultText"></p>
+        <p id="scenarioComparisonText"></p>
+        <p id="profitDiffText"></p>
+      </div>
+      <!-- סעיף להצגת הנוסחאות ב־LaTeX -->
+      <div class="formulas" id="formulasSection" style="display: none;">
+        <div class="formula-item">
+          <span class="formula-label" id="labelRateDiff"></span>
+          <span class="formula-math" id="mathRateDiff"></span>
+        </div>
+        <div class="formula-item">
+          <span class="formula-label" id="labelForeign1"></span>
+          <span class="formula-math" id="mathForeign1"></span>
+        </div>
+        <div class="formula-item">
+          <span class="formula-label" id="labelForeign2a"></span>
+          <span class="formula-math" id="mathForeign2a"></span>
+        </div>
+        <div class="formula-item">
+          <span class="formula-label" id="labelForeign2b"></span>
+          <span class="formula-math" id="mathForeign2b"></span>
+        </div>
+        <div class="formula-item">
+          <span class="formula-label" id="labelLocal1"></span>
+          <span class="formula-math" id="mathLocal1"></span>
+        </div>
+        <div class="formula-item">
+          <span class="formula-label" id="labelLocal2"></span>
+          <span class="formula-math" id="mathLocal2"></span>
+        </div>
+        <div class="formula-item">
+          <span class="formula-label" id="labelPctDiff"></span>
+          <span class="formula-math" id="mathPctDiff"></span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // פונקציה להסרת הודעות שגיאה כאשר המשתמש כותב מחדש
+    function clearError(inputId, errorId) {
+      const input = document.getElementById(inputId);
+      const errorDiv = document.getElementById(errorId);
+      input.removeAttribute('aria-invalid');
+      errorDiv.textContent = '';
+    }
+
+    // הוספת מאזינים לאירוע input כדי לנקות שגיאות
+    document.getElementById('initialIls').addEventListener('input', () => clearError('initialIls', 'initialIlsError'));
+    document.getElementById('rateTransfer').addEventListener('input', () => clearError('rateTransfer', 'rateTransferError'));
+    document.getElementById('rateReturn').addEventListener('input', () => clearError('rateReturn', 'rateReturnError'));
+    document.getElementById('profitForeign').addEventListener('input', () => clearError('profitForeign', 'profitForeignError'));
+    document.getElementById('profitLocal').addEventListener('input', () => clearError('profitLocal', 'profitLocalError'));
+
+    // פונקציה לביצוע ולידציה, חישובים ועדכון התוצאות והנוסחאות
+    function calculateResults() {
+      // איפוס משתנה דגל שגיאה
+      let hasError = false;
+
+      // פונקציה לוולידציה של שדות אינטגרליים
+      function validateIntegerField(id, errorId, errorMessage) {
+        const el = document.getElementById(id);
+        const valueStr = el.value.trim();
+        const errorDiv = document.getElementById(errorId);
+        // בדיקה אם ריק או לא מספר
+        const valueNum = Number(valueStr);
+        if (valueStr === '' || isNaN(valueNum) || !Number.isInteger(valueNum)) {
+          el.setAttribute('aria-invalid', 'true');
+          errorDiv.textContent = errorMessage;
+          if (!hasError) {
+            el.focus();
+            hasError = true;
+          }
+          return null;
         }
+        return valueNum;
+      }
 
-        // הוספת מאזינים לאירוע input כדי לנקות שגיאות
-        document.getElementById('initialIls').addEventListener('input', () => clearError('initialIls', 'initialIlsError'));
-        document.getElementById('rateTransfer').addEventListener('input', () => clearError('rateTransfer', 'rateTransferError'));
-        document.getElementById('rateReturn').addEventListener('input', () => clearError('rateReturn', 'rateReturnError'));
-        document.getElementById('profitForeign').addEventListener('input', () => clearError('profitForeign', 'profitForeignError'));
-        document.getElementById('profitLocal').addEventListener('input', () => clearError('profitLocal', 'profitLocalError'));
-
-        // פונקציה לביצוע ולידציה, חישובים ועדכון התוצאות והנוסחאות
-        function calculateResults() {
-            // איפוס משתנה דגל שגיאה
-            let hasError = false;
-
-            // פונקציה לוולידציה של שדות אינטגרליים
-            function validateIntegerField(id, errorId, errorMessage) {
-                const el = document.getElementById(id);
-                const valueStr = el.value.trim();
-                const errorDiv = document.getElementById(errorId);
-                // בדיקה אם ריק או לא מספר
-                const valueNum = Number(valueStr);
-                if (valueStr === '' || isNaN(valueNum) || !Number.isInteger(valueNum)) {
-                    el.setAttribute('aria-invalid', 'true');
-                    errorDiv.textContent = errorMessage;
-                    if (!hasError) {
-                        el.focus();
-                        hasError = true;
-                    }
-                    return null;
-                }
-                return valueNum;
-            }
-
-            // פונקציה לוולידציה של שדות עשרוניים
-            function validateDecimalField(id, errorId, decimals, errorMessage) {
-                const el = document.getElementById(id);
-                const valueStr = el.value.trim();
-                const errorDiv = document.getElementById(errorId);
-                const valueNum = Number(valueStr);
-                // בדיקה אם ריק או לא מספר
-                if (valueStr === '' || isNaN(valueNum)) {
-                    el.setAttribute('aria-invalid', 'true');
-                    errorDiv.textContent = errorMessage;
-                    if (!hasError) {
-                        el.focus();
-                        hasError = true;
-                    }
-                    return null;
-                }
-                // בדיקה על מספר הספרות אחרי הנקודה
-                const parts = valueStr.split('.');
-                if (parts.length > 1 && parts[1].length > decimals) {
-                    el.setAttribute('aria-invalid', 'true');
-                    errorDiv.textContent = `יש להזין מספר עם עד ${decimals} ספרות אחרי הנקודה`;
-                    if (!hasError) {
-                        el.focus();
-                        hasError = true;
-                    }
-                    return null;
-                }
-                return valueNum;
-            }
-
-            // ולידציה לשדה סכום התחלתי (שלם בלבד)
-            const initialIls = validateIntegerField(
-                'initialIls',
-                'initialIlsError',
-                'יש להזין מספר שלם בשקלים בלבד'
-            );
-            // ולידציה לשדה שער המרה (עד 4 ספרות אחרי הנקודה)
-            const rateTransfer = validateDecimalField(
-                'rateTransfer',
-                'rateTransferError',
-                4,
-                'יש להזין מספר חוקי'
-            );
-            // ולידציה לשדה שער המרה חזרה (עד 4 ספרות אחרי הנקודה)
-            const rateReturn = validateDecimalField(
-                'rateReturn',
-                'rateReturnError',
-                4,
-                'יש להזין מספר חוקי'
-            );
-            // ולידציה לשדה רווח בחו"ל (עד 2 ספרות אחרי הנקודה)
-            const profitForeignPercent = validateDecimalField(
-                'profitForeign',
-                'profitForeignError',
-                2,
-                'יש להזין אחוז חוקי'
-            );
-            // ולידציה לשדה רווח בארץ (עד 2 ספרות אחרי הנקודה)
-            const profitLocalPercent = validateDecimalField(
-                'profitLocal',
-                'profitLocalError',
-                2,
-                'יש להזין אחוז חוקי'
-            );
-
-            if (hasError) {
-                return; // עצירת החישובים במידה ויש שגיאה
-            }
-
-            // המרת אחוזים לערכים עשרוניים
-            const profitForeign = profitForeignPercent / 100;
-            const profitLocal = profitLocalPercent / 100;
-
-            // חישוב הפרש באחוזים בין שערי הקנייה והמכירה
-            const rateDiffPct = ((rateReturn - rateTransfer) / rateTransfer) * 100;
-
-            // חישוב תרחיש חו"ל
-            const foreignAmount = initialIls / rateTransfer;                                 // המרת ₪ לדולר
-            const foreignAfterProfit = foreignAmount * (1 + profitForeign);                   // לאחר הרווח בחו"ל
-            const finalIlsForeign = foreignAfterProfit * rateReturn;                          // המרה חזרה ל₪
-            const gainIlsForeign = finalIlsForeign - initialIls;                              // רווח נטו (₪)
-
-            // חישוב תרחיש מקומי
-            const finalIlsLocal = initialIls * (1 + profitLocal);                             // סכום לאחר רווח בארץ
-            const gainIlsLocal = finalIlsLocal - initialIls;                                  // רווח נטו (₪)
-
-            // חישוב הפרש באחוזים בין שני הרווחים
-            const pctDiff = ((gainIlsForeign - gainIlsLocal) / gainIlsLocal) * 100;
-
-            // עדכון התוצאות המספריות
-            document.getElementById('rateDiffText').textContent =
-                `הפרש שערים (מכירה מול קנייה): ${rateDiffPct.toFixed(2)}%`;
-            document.getElementById('foreignResultText').textContent =
-                `רווח אם משקיעים בחו"ל: ${gainIlsForeign.toFixed(2)} ₪`;
-            document.getElementById('localResultText').textContent =
-                `רווח אם משקיעים בארץ: ${gainIlsLocal.toFixed(2)} ₪`;
-            if (gainIlsForeign > gainIlsLocal) {
-                document.getElementById('scenarioComparisonText').textContent =
-                    `רווחי יותר להשקיע בחו"ל.`;
-            } else if (gainIlsForeign < gainIlsLocal) {
-                document.getElementById('scenarioComparisonText').textContent =
-                    `רווחי יותר להשקיע בארץ.`;
-            } else {
-                document.getElementById('scenarioComparisonText').textContent =
-                    `הרווחים שווים בשני התרחישים.`;
-            }
-            document.getElementById('profitDiffText').textContent =
-                `הפרש באחוזים בין הרווחים: ${Math.abs(pctDiff).toFixed(2)}%`;
-
-            // עדכון תוויות הנוסחאות (טקסט נפרד)
-            document.getElementById('labelRateDiff').textContent = 'הפרש שערים:';
-            document.getElementById('labelForeign1').textContent = 'תרחיש חו"ל (שלב 1):';
-            document.getElementById('labelForeign2a').textContent = 'תרחיש חו"ל (שלב 2a):';
-            document.getElementById('labelForeign2b').textContent = 'תרחיש חו"ל (שלב 2b):';
-            document.getElementById('labelLocal1').textContent = 'תרחיש מקומי (שלב 1):';
-            document.getElementById('labelLocal2').textContent = 'תרחיש מקומי (שלב 2):';
-            document.getElementById('labelPctDiff').textContent = 'הפרש אחוזים:';
-
-            // עדכון הנוסחאות ב־LaTeX (ללא טקסט בתוך ה־MathJax)
-            document.getElementById('mathRateDiff').innerHTML =
-                `\\(\\frac{${rateReturn.toFixed(4)} - ${rateTransfer.toFixed(4)}}{${rateTransfer.toFixed(4)}} \\times 100 = ${rateDiffPct.toFixed(2)}\\%\\)`;
-
-            document.getElementById('mathForeign1').innerHTML =
-                `\\(\\frac{${initialIls}}{${rateTransfer}} = ${foreignAmount.toFixed(2)}\\)`;
-
-            document.getElementById('mathForeign2a').innerHTML =
-                `\\(${foreignAmount.toFixed(2)} \\times (1 + ${profitForeign.toFixed(2)}) = ${foreignAfterProfit.toFixed(2)}\\)`;
-            document.getElementById('mathForeign2b').innerHTML =
-                `\\(${foreignAfterProfit.toFixed(2)} \\times ${rateReturn.toFixed(4)} = ${finalIlsForeign.toFixed(2)}\\)`;
-
-            document.getElementById('mathLocal1').innerHTML =
-                `\\(${initialIls} \\times (1 + ${profitLocal.toFixed(2)}) = ${finalIlsLocal.toFixed(2)}\\)`;
-
-            document.getElementById('mathLocal2').innerHTML =
-                `\\(${finalIlsLocal.toFixed(2)} - ${initialIls} = ${gainIlsLocal.toFixed(2)}\\)`;
-
-            document.getElementById('mathPctDiff').innerHTML =
-                `\\(\\frac{${gainIlsForeign.toFixed(2)} - ${gainIlsLocal.toFixed(2)}}{${gainIlsLocal.toFixed(2)}} \\times 100 = ${pctDiff.toFixed(2)}\\%\\)`;
-
-            // הצגת הסעיפים והפעלת MathJax לרינדור הנוסחאות
-            document.getElementById('resultsSection').style.display = 'block';
-            document.getElementById('formulasSection').style.display = 'block';
-            MathJax.typeset();
+      // פונקציה לוולידציה של שדות עשרוניים
+      function validateDecimalField(id, errorId, decimals, errorMessage) {
+        const el = document.getElementById(id);
+        const valueStr = el.value.trim();
+        const errorDiv = document.getElementById(errorId);
+        const valueNum = Number(valueStr);
+        // בדיקה אם ריק או לא מספר
+        if (valueStr === '' || isNaN(valueNum)) {
+          el.setAttribute('aria-invalid', 'true');
+          errorDiv.textContent = errorMessage;
+          if (!hasError) {
+            el.focus();
+            hasError = true;
+          }
+          return null;
         }
-    </script>
+        // בדיקה על מספר הספרות אחרי הנקודה
+        const parts = valueStr.split('.');
+        if (parts.length > 1 && parts[1].length > decimals) {
+          el.setAttribute('aria-invalid', 'true');
+          errorDiv.textContent = `יש להזין מספר עם עד ${decimals} ספרות אחרי הנקודה`;
+          if (!hasError) {
+            el.focus();
+            hasError = true;
+          }
+          return null;
+        }
+        return valueNum;
+      }
+
+      // ולידציה לשדה סכום התחלתי (שלם בלבד)
+      const initialIls = validateIntegerField(
+        'initialIls',
+        'initialIlsError',
+        'יש להזין מספר שלם בשקלים בלבד'
+      );
+      // ולידציה לשדה שער המרה (עד 4 ספרות אחרי הנקודה)
+      const rateTransfer = validateDecimalField(
+        'rateTransfer',
+        'rateTransferError',
+        4,
+        'יש להזין מספר חוקי'
+      );
+      // ולידציה לשדה שער המרה חזרה (עד 4 ספרות אחרי הנקודה)
+      const rateReturn = validateDecimalField(
+        'rateReturn',
+        'rateReturnError',
+        4,
+        'יש להזין מספר חוקי'
+      );
+      // ולידציה לשדה רווח בחו"ל (עד 2 ספרות אחרי הנקודה)
+      const profitForeignPercent = validateDecimalField(
+        'profitForeign',
+        'profitForeignError',
+        2,
+        'יש להזין אחוז חוקי'
+      );
+      // ולידציה לשדה רווח בארץ (עד 2 ספרות אחרי הנקודה)
+      const profitLocalPercent = validateDecimalField(
+        'profitLocal',
+        'profitLocalError',
+        2,
+        'יש להזין אחוז חוקי'
+      );
+
+      if (hasError) {
+        return; // עצירת החישובים במידה ויש שגיאה
+      }
+
+      // המרת אחוזים לערכים עשרוניים
+      const profitForeign = profitForeignPercent / 100;
+      const profitLocal = profitLocalPercent / 100;
+
+      // חישוב הפרש באחוזים בין שערי הקנייה והמכירה
+      const rateDiffPct = ((rateReturn - rateTransfer) / rateTransfer) * 100;
+
+      // חישוב תרחיש חו"ל
+      const foreignAmount = initialIls / rateTransfer;                                 // המרת ₪ לדולר
+      const foreignAfterProfit = foreignAmount * (1 + profitForeign);                   // לאחר הרווח בחו"ל
+      const finalIlsForeign = foreignAfterProfit * rateReturn;                          // המרה חזרה ל₪
+      const gainIlsForeign = finalIlsForeign - initialIls;                              // רווח נטו (₪)
+
+      // חישוב תרחיש מקומי
+      const finalIlsLocal = initialIls * (1 + profitLocal);                             // סכום לאחר רווח בארץ
+      const gainIlsLocal = finalIlsLocal - initialIls;                                  // רווח נטו (₪)
+
+      // חישוב הפרש באחוזים בין שני הרווחים
+      const pctDiff = ((gainIlsForeign - gainIlsLocal) / gainIlsLocal) * 100;
+
+      // עדכון התוצאות המספריות
+      document.getElementById('rateDiffText').textContent =
+        `הפרש שערים (מכירה מול קנייה): ${rateDiffPct.toFixed(2)}%`;
+      document.getElementById('foreignResultText').textContent =
+        `רווח אם משקיעים בחו"ל: ${gainIlsForeign.toFixed(2)} ₪`;
+      document.getElementById('localResultText').textContent =
+        `רווח אם משקיעים בארץ: ${gainIlsLocal.toFixed(2)} ₪`;
+      if (gainIlsForeign > gainIlsLocal) {
+        document.getElementById('scenarioComparisonText').textContent =
+          `רווחי יותר להשקיע בחו"ל.`;
+      } else if (gainIlsForeign < gainIlsLocal) {
+        document.getElementById('scenarioComparisonText').textContent =
+          `רווחי יותר להשקיע בארץ.`;
+      } else {
+        document.getElementById('scenarioComparisonText').textContent =
+          `הרווחים שווים בשני התרחישים.`;
+      }
+      document.getElementById('profitDiffText').textContent =
+        `הפרש באחוזים בין הרווחים: ${Math.abs(pctDiff).toFixed(2)}%`;
+
+      // עדכון תוויות הנוסחאות (טקסט נפרד)
+      document.getElementById('labelRateDiff').textContent = 'הפרש שערים:';
+      document.getElementById('labelForeign1').textContent = 'תרחיש חו"ל (שלב 1):';
+      document.getElementById('labelForeign2a').textContent = 'תרחיש חו"ל (שלב 2a):';
+      document.getElementById('labelForeign2b').textContent = 'תרחיש חו"ל (שלב 2b):';
+      document.getElementById('labelLocal1').textContent = 'תרחיש מקומי (שלב 1):';
+      document.getElementById('labelLocal2').textContent = 'תרחיש מקומי (שלב 2):';
+      document.getElementById('labelPctDiff').textContent = 'הפרש אחוזים:';
+
+      // עדכון הנוסחאות ב־LaTeX (ללא טקסט בתוך ה־MathJax)
+      document.getElementById('mathRateDiff').innerHTML =
+        `\\(\\frac{${rateReturn.toFixed(4)} - ${rateTransfer.toFixed(4)}}{${rateTransfer.toFixed(4)}} \\times 100 = ${rateDiffPct.toFixed(2)}\\%\\)`;
+
+      document.getElementById('mathForeign1').innerHTML =
+        `\\(\\frac{${initialIls}}{${rateTransfer}} = ${foreignAmount.toFixed(2)}\\)`;
+
+      document.getElementById('mathForeign2a').innerHTML =
+        `\\(${foreignAmount.toFixed(2)} \\times (1 + ${profitForeign.toFixed(2)}) = ${foreignAfterProfit.toFixed(2)}\\)`;
+      document.getElementById('mathForeign2b').innerHTML =
+        `\\(${foreignAfterProfit.toFixed(2)} \\times ${rateReturn.toFixed(4)} = ${finalIlsForeign.toFixed(2)}\\)`;
+
+      document.getElementById('mathLocal1').innerHTML =
+        `\\(${initialIls} \\times (1 + ${profitLocal.toFixed(2)}) = ${finalIlsLocal.toFixed(2)}\\)`;
+
+      document.getElementById('mathLocal2').innerHTML =
+        `\\(${finalIlsLocal.toFixed(2)} - ${initialIls} = ${gainIlsLocal.toFixed(2)}\\)`;
+
+      document.getElementById('mathPctDiff').innerHTML =
+        `\\(\\frac{${gainIlsForeign.toFixed(2)} - ${gainIlsLocal.toFixed(2)}}{${gainIlsLocal.toFixed(2)}} \\times 100 = ${pctDiff.toFixed(2)}\\%\\)`;
+
+      // הצגת הסעיפים והפעלת MathJax לרינדור הנוסחאות
+      document.getElementById('resultsSection').style.display = 'block';
+      document.getElementById('formulasSection').style.display = 'block';
+      MathJax.typeset();
+    }
+  </script>
 </body>
 
 </html>
